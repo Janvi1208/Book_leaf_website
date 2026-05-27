@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL:
+    process.env.REACT_APP_API_URL ||
+    "https://bookleaf-backend1.onrender.com/api",
   timeout: 30000,
 });
 
