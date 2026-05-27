@@ -249,4 +249,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { seed, importSample };
+module.exports = { seed };
