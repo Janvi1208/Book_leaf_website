@@ -5,6 +5,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const booksRoutes = require("./routes/books");
 const ticketsRoutes = require("./routes/tickets");
+const { getDb } = require("./db/database");
+const { seed } = require("./db/seed");
 
 const app = express();
 
@@ -106,17 +108,32 @@ app.use((err, _req, res, _next) => {
 // ─────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 5000;
-
 const aiKey = process.env.GROQ_API_KEY || process.env.ANTHROPIC_API_KEY;
 
-app.listen(PORT, () => {
-  console.log(`\n🍃 BookLeaf API running on http://localhost:${PORT}`);
+async function startServer() {
+  try {
+    const db = getDb();
+    const { count } = db.prepare("SELECT COUNT(*) AS count FROM users").get();
+    if (!count) {
+      console.log(
+        "🌱 No users found, seeding database with demo credentials...",
+      );
+      await seed();
+    }
+  } catch (err) {
+    console.error("Startup seed failed:", err);
+    process.exit(1);
+  }
 
-  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+  app.listen(PORT, () => {
+    console.log(`\n🍃 BookLeaf API running on http://localhost:${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+    console.log(
+      `AI: ${aiKey ? "✓ Configured" : "✗ Not configured (manual mode)"}\n`,
+    );
+  });
+}
 
-  console.log(
-    `AI: ${aiKey ? "✓ Configured" : "✗ Not configured (manual mode)"}\n`,
-  );
-});
+startServer();
 
 module.exports = app;
