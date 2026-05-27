@@ -1,9 +1,13 @@
 import axios from "axios";
 
+const BACKEND_URL =
+  process.env.REACT_APP_API_URL?.trim() ||
+  "https://bookleaf-backend1.onrender.com/api";
+
+console.log("BookLeaf API baseURL:", BACKEND_URL);
+
 const api = axios.create({
-  baseURL:
-    process.env.REACT_APP_API_URL ||
-    "https://bookleaf-backend1.onrender.com/api",
+  baseURL: BACKEND_URL,
   timeout: 30000,
 });
 
