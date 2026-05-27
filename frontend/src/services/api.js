@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BACKEND_URL =
   process.env.REACT_APP_API_URL?.trim() ||
-  "https://bookleaf-backend1.onrender.com/api";
+  "https://bookleaf-author-portal-0a34.onrender.com/api";
 
 console.log("BookLeaf API baseURL:", BACKEND_URL);
 
